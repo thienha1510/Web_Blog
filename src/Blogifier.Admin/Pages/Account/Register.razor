@@ -1,0 +1,43 @@
+@layout AccountLayout
+@page "/admin/register/"
+@inject HttpClient Http
+@inject NavigationManager _navigationManager
+@inject IStringLocalizer<Resource> _localizer
+
+<PageTitle Title="@_localizer["Đăng ký"]" />
+
+@if (showError)
+{
+    <div class="account-message -error">@_localizer["Đăng ký thất bại"].</div>
+}
+
+@if (model != null)
+{
+    <EditForm Model="@model" OnValidSubmit="RegisterUser">
+        <center>
+            <label></label>
+        </center>
+        <DataAnnotationsValidator />
+        <div class="form-floating form-item">
+            <input @bind="model.Email" id="registerEmail" class="form-control" type="email" placeholder="@_localizer["Email của bạn"]" autofocus>
+            <label for="registerEmail">@_localizer["Email của bạn"]</label>
+            <ValidationMessage For="@(() => model.Email)"></ValidationMessage>
+        </div>
+        <div class="form-floating form-item">
+            <input @bind="model.Name" id="registerName" class="form-control" type="text" placeholder="@_localizer["Họ và tên"]">
+            <label for="registerName">@_localizer["Họ và tên"]</label>
+            <ValidationMessage For="@(() => model.Name)"></ValidationMessage>
+        </div>
+        <div class="form-floating form-item">
+            <input @bind="model.Password" id="registerPassword" class="form-control" type="password" placeholder="@_localizer["Mật khẩu"]">
+            <label for="registerPassword">@_localizer["Mật khẩu"]</label>
+            <ValidationMessage For="@(() => model.Password)"></ValidationMessage>
+        </div>
+        <div class="form-floating form-item">
+            <input @bind="model.PasswordConfirm" id="registerConfirmPassword" class="form-control" type="password" placeholder="@_localizer["Xác nhận mật khẩu"]">
+            <label for="registerConfirmPassword">@_localizer["Xác nhận mật khẩu"]</label>
+            <ValidationMessage For="@(() => model.PasswordConfirm)"></ValidationMessage>
+        </div>
+        <button type="submit" class="btn btn-blogifier btn-block btn-floating">Tạo tài khoản</button>
+    </EditForm>
+}

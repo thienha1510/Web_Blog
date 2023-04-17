@@ -1,0 +1,39 @@
+@layout AccountLayout
+@page "/admin/login/"
+@inject HttpClient Http
+@inject NavigationManager _navigationManager
+@inject IStringLocalizer<Resource> _localizer
+
+<PageTitle Title="@_localizer["Đăng nhập"]" />
+
+@if (showError)
+{
+    <div class="account-message -error">@_localizer["Đăng nhập thất bại"].</div>
+}
+
+@if (model != null)
+{
+<EditForm Model="@model" OnValidSubmit="LoginUser">
+    <DataAnnotationsValidator />
+    <div class="form-floating form-item">
+        <input @bind="model.Email" type="email" class="form-control" id="loginEmail" placeholder="@_localizer["Nhập email của bạn"]" autofocus>
+        <label for="loginEmail">@_localizer["Nhập email của bạn"]</label>
+        <ValidationMessage For="@(() => model.Email)"></ValidationMessage>
+    </div>
+    <div class="form-floating form-item">
+        <input @bind="model.Password" type="password" class="form-control" id="loginPassword" placeholder="@_localizer["Mật khẩu"]">
+        <label for="loginPassword">@_localizer["Mật khẩu"]</label>
+        <ValidationMessage For="@(() => model.Password)"></ValidationMessage>
+    </div>
+    <button type="submit" class="btn btn-blogifier btn-block btn-floating">@_localizer["Đăng nhập"]</button>
+    <center>
+        <label></label>
+    </center>
+    <div class="clearfix">
+        <a class="header-nav-button -register ms-4" href="admin/register/" title="@_localizer["Đăng ký tài khoản"]" aria-label="@_localizer["Đăng ký tài khoản"]" role="button">Đăng ký tài khoản</a>
+    </div>
+
+
+
+</EditForm>
+}

@@ -1,0 +1,27 @@
+@layout SettingsLayout
+@page "/admin/settings/customize/"
+@inject HttpClient _http
+@inject IStringLocalizer<Resource> _localizer
+@inject IJSRuntime JSRuntime
+
+<PageTitle Title="@_localizer["Tùy chỉnh"]" />
+
+<h1 class="section-title">@_localizer["Tùy chỉnh"]</h1>
+<p class="section-desc w-75">@_localizer["Giao diện"]</p>
+<div class="section-content">
+    <SettingsComponent @ref="ChildSettings" />
+    <button @onclick="()=> SaveSettings()" class="btn btn-blogifier px-5 mt-4">@_localizer["Lưu"]</button>
+
+</div>
+
+<ToasterComponent @ref="Toaster" />
+
+@code {
+   protected ToasterComponent Toaster;
+   SettingsComponent ChildSettings;
+
+   async Task SaveSettings()
+   {
+      Toaster.Toast(await ChildSettings.Save());
+   }
+}

@@ -1,0 +1,95 @@
+@layout SettingsLayout
+@page "/admin/settings/themes/"
+@inject HttpClient _http
+@inject IStringLocalizer<Resource> _localizer
+@inject IJSRuntime JSRuntime
+
+<PageTitle Title="@_localizer["Giao diện"]" />
+
+@if (CurrentTheme != null)
+{
+    <h1 class="section-title">@_localizer["Giao diện"]</h1>
+    <div class="section-content">
+        <div class="themes">
+            <div class="themes-item d-flex">
+                <img src="@CurrentTheme.Cover" class="themes-thumbnail" alt="@CurrentTheme.Title">
+                <div class="themes-info">
+                    <h3 class="themes-title">@CurrentTheme.Title (@_localizer["Hiện tại"])</h3>
+                    <ul class="themes-meta d-flex">
+                        <li class="themes-meta-item">@_localizer["Thiết kế"] 2.1</li>
+                        <li class="themes-meta-item">@_localizer[""] <a href="https://www.facebook.com/thienha151000/">Nguyễn Thiên Hà</a></li>
+                    </ul>
+                    <p class="themes-desc">Đây chỉnh mang sự tượng trưng</p>
+                    <a class="btn btn-blogifier px-4" href="/admin/settings/customize/">@_localizer["Tùy chỉnh"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<ToasterComponent @ref="Toaster" />
+
+@code {
+    protected Blog Blog { get; set; }
+    protected List<ThemeItem> Themes { get; set; }
+    protected ThemeItem CurrentTheme { get; set; }
+    protected ToasterComponent Toaster;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    public async Task Load()
+    {
+        Themes = new List<ThemeItem>();
+
+        Blog = await _http.GetFromJsonAsync<Blog>("api/blog");
+        var allThemes = await _http.GetFromJsonAsync<IList<string>>($"api/storage/themes");
+
+        foreach (var theme in allThemes)
+        {
+            if (theme.ToLower() == Blog.Theme.ToLower())
+            {
+                CurrentTheme = new ThemeItem
+                {
+                    Title = theme.Capitalize(),
+                    IsCurrent = (Blog.Theme.ToLower() == theme.ToLower()),
+                    Cover = await GetCover(theme)
+                };
+            }
+            else
+            {
+                Themes.Add(new ThemeItem
+                {
+                    Title = theme.Capitalize(),
+                    IsCurrent = (Blog.Theme.ToLower() == theme.ToLower()),
+                    Cover = await GetCover(theme)
+                });
+            }
+        }
+    }
+
+    protected async Task SelectTheme(string theme)
+    {
+        Blog.Theme = theme;
+        Toaster.Toast(await _http.PutAsJsonAsync<Blog>($"api/blog", Blog));
+        await Load();
+    }
+
+    private async Task<string> GetCover(string theme)
+    {
+        string slash = System.IO.Path.DirectorySeparatorChar.ToString();
+        string file = $"wwwroot{slash}themes{slash}{theme}{slash}screenshot.png";
+        var result = await _http.PutAsJsonAsync<string>($"api/storage/exists", file);
+
+        if (result.IsSuccessStatusCode)
+            return $"themes/{theme}/screenshot.png";
+        else
+            return "img/img-placeholder.png";
+    }
+
+    //bool showModal = false;
+    //void ModalShow() => showModal = true;
+    //void ModalCancel() => showModal = false;
+}

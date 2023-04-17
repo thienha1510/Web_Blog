@@ -1,0 +1,46 @@
+@layout SettingsLayout
+@page "/admin/settings/about/"
+@inject HttpClient _http
+@inject IStringLocalizer<Resource> _localizer
+@inject IJSRuntime JSRuntime
+
+<PageTitle Title="@_localizer["Về chúng tôi"]"/>
+
+<h1 class="section-title">@_localizer["Web của chúng tôi"]</h1>
+<div class="section-content">
+    <div class="about-blogifier">
+        <div class="blogifier-desc">
+            <p>@_localizer["chúng tôi đã xây dựng sản phẩm với .NET Core 5.0 và các công nghệ mới."]</p>
+        </div>
+    </div>
+</div>
+
+@if (AboutModel != null)
+{
+    <h1 class="section-title">@_localizer["Chi tiết"]</h1>
+    <div class="section-content">
+        <ul class="about-info">
+            <li class="about-info-item">
+                <label class="about-info-label">@_localizer["Phiên bản"]:</label>
+                <div class="about-info-value">2.0</div>
+            </li>
+            <li class="about-info-item">
+                <label class="about-info-label">@_localizer["Hệ điều hành"]:</label>
+                <div class="about-info-value">Windows, Linux, IOS</div>
+            </li>
+            <li class="about-info-item">
+                <label class="about-info-label">@_localizer["Nhà cung cấp data"]:</label>
+                <div class="about-info-value">Hiện tại chúng tôi sử dụng data tự cấp</div>
+            </li>
+        </ul>
+    </div>
+}
+
+@code {
+   protected AboutModel AboutModel { get; set; }
+
+   protected override async Task OnInitializedAsync()
+   {
+      AboutModel = await _http.GetFromJsonAsync<AboutModel>($"api/about");
+   }
+}

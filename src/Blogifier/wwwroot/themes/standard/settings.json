@@ -1,0 +1,58 @@
+{
+  "Sections": [
+    {
+      "Label": "Social Buttons",
+      "Fields": [
+        {
+          "Id": "enabled",
+          "Label": "Enabled",
+          "Type": "checkbox",
+          "Value": "False",
+          "Options": null
+        },
+        {
+          "Id": "facebook",
+          "Label": "Facebook",
+          "Type": "text",
+          "Value": "https://www.facebook.com/thienha151000/",
+          "Options": null
+        },
+        {
+          "Id": "twitter",
+          "Label": "Twitter",
+          "Type": "text",
+          "Value": "",
+          "Options": null
+        }
+      ]
+    },
+    {
+      "Label": "Select Dropdown Sample",
+      "Fields": [
+        {
+          "Id": "dd-sample",
+          "Label": "Select Sample",
+          "Type": "select",
+          "Value": "h\u00E1i l\u00F4",
+          "Options": [
+            "one",
+            "two",
+            "three"
+          ]
+        }
+      ]
+    },
+    {
+      "Label": "Section Three",
+      "Fields": [
+        {
+          "Id": "txt-area",
+          "Label": "Text Area Sample",
+          "Type": "textarea",
+          "Value": "Hello c\u00E1c b\u1EA1n",
+          "Options": null
+        }
+      ]
+    }
+  ]
+}
